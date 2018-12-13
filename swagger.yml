@@ -1,0 +1,160 @@
+swagger: "2.0"
+info:
+  description: "This is the Itemly Todo API. Find out more at [https://itemly.io](https://itemly.io)!"
+  version: "0.0.1"
+  title: "Itemly"
+  termsOfService: "http://itemly.io/terms"
+  contact: 
+    email: "terms@itemly.io"
+  license: 
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "api.itemly.io"
+basePath: "/v0"
+tags: 
+- name: "todos"
+  description: "All your todos in one place!"
+  externalDocs: 
+    description: "Find out more about Itemly"
+    url: "http://itemly.io/docs"
+schemes: 
+  - "https"
+  - "http"
+paths: 
+  /todos:
+    get: 
+      tags: 
+      - "todos"
+      summary: "Get all todos"
+      description: "Returns all todos"
+      operationId: "getAllTodos"
+      produces: 
+      - "application/json"
+      responses: 
+        200: 
+          description: "success"
+          schema: 
+            $ref: "#/definitions/Todo"
+        404: 
+          description: "todos not found"
+    post: 
+      tags: 
+      - "todos"
+      summary: "Create a new todo"
+      description: "Creates a single todo item"
+      operationId: "createSingleTodo"
+      consumes: 
+      - "application/json"
+      produces: 
+      - "application/json"
+      parameters: 
+      - in: "body"
+        name: "body"
+        description: "Todo object that needs to be added list"
+        required: true
+        schema:
+          $ref: "#/definitions/Todo"
+      responses: 
+        202: 
+          description: "success"
+          schema: 
+            $ref: "#/definitions/Todo"
+        405: 
+          description: "invalid todo"
+  /todos/{id}:
+    get: 
+      tags: 
+      - "todos"
+      summary: "Get a single specified todo item"
+      description: "Returns a single todo item"
+      operationId: "getSingleTodo"
+      produces: 
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of todo to return"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses: 
+        200: 
+          description: "success"
+          schema: 
+            $ref: "#/definitions/Todo"
+        404: 
+          description: "todo not found"
+    put: 
+      tags: 
+      - "todos"
+      summary: "Update an existing todo"
+      description: "Update an existing todo in the list"
+      operationId: "updateSingleTodo"
+      consumes: 
+      - "application/json"
+      produces: 
+      - "application/json"
+      parameters: 
+      - name: "id"
+        in: "path"
+        description: "ID of the todo that needs to be updated"
+        required: true
+        type: "integer"
+        format: "int64"
+      - in: "body"
+        name: "body"
+        description: "Todo object that needs to be added list"
+        required: true
+        schema:
+          $ref: "#/definitions/Todo"
+      responses: 
+        202: 
+          description: "success"
+          schema: 
+            $ref: "#/definitions/Todo"
+        405: 
+          description: "invalid todo"
+        404: 
+          description: "todo not found"
+    delete: 
+      tags: 
+      - "todos"
+      summary: "Delete a single specified todo item"
+      description: "Deletes a single todo item"
+      operationId: "deleteSingleTodo"
+      produces: 
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of todo to return"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses: 
+        200: 
+          description: "success"
+          schema: 
+            $ref: "#/definitions/Todo"
+        404: 
+          description: "todo not found"
+definitions: 
+  Todo:
+    type: "object"
+    required: 
+    - "title"
+    - "done"
+    properties: 
+      id: 
+        type: "integer"
+        description: "Automatically assigned unique identifier"
+        format: "int64"
+      title: 
+        type: "string"
+        description: "What do you need to do?"
+        example: "Do my homework"
+      done: 
+        type: "boolean"
+        description: "Is it done or not?"
+      
+    
