@@ -11,15 +11,15 @@ export class TodosController {
 
     /**
      *
-     * @param todoDto Create a todo with a `TodoDto`.
-     * @returns todoDto Returns the `TodoDto` as confirmation.
+     * @param todo Create a todo.
+     * @returns the todo as confirmation.
      */
     @Post()
     @Header('Cache-Control', 'none')
     @ApiOperation({ title: 'Create a todo'})
-    async create(@Body() todoDto: TodoDto) {
-        this.todosService.create(todoDto);
-        return todoDto;
+    async create(@Body() todo) {
+        this.todosService.create(todo);
+        return todo;
     }
 
     /**

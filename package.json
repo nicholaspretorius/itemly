@@ -11,7 +11,7 @@
     "prestart:prod": "rm -rf dist && tsc",
     "start:prod": "node dist/main.js",
     "start:hmr": "node dist/server",
-    "test": "jest",
+    "test": "jest --watch",
     "test:cov": "jest --coverage",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "test:cjs": "tsc ./test/steps/*.ts --outDir ./dist/test/steps/ && cucumber-js --tags 'not @wip' ./test/features/ -r ./dist/test/steps/",
