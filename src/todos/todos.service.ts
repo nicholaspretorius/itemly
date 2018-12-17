@@ -1,4 +1,4 @@
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus, NotFoundException, BadRequestException } from '@nestjs/common';
 import { TodoDto } from './dto/todo.dto';
 import { Todo } from './interfaces/todo.interface';
 import { ITodosService } from './interfaces/todo.service.interface';
@@ -9,9 +9,9 @@ export class TodosService implements ITodosService {
     private todos: Todo[] = [];
     id: number = 0;
 
-    create(todo): Todo {
+    create(todo): TodoDto {
         // TODO: validate todo object
-        if (!todo) this.badRequest();
+        if (!todo || !todo.description) this.badRequest('Invalid request', HttpStatus.BAD_REQUEST);
 
         if (!todo.id) todo.id = ++this.id;
 
@@ -19,7 +19,7 @@ export class TodosService implements ITodosService {
         return this.todos[this.id - 1];
     }
 
-    findAll(): Todo[] {
+    findAll(): TodoDto[] {
         return this.todos;
     }
 
@@ -34,11 +34,11 @@ export class TodosService implements ITodosService {
 
     update(id: number, update): TodoDto {
 
-        if (!id) this.badRequest();
+        if (!id) throw BadRequestException;
 
         const todo = this.findOne(id);
 
-        if (!todo) this.notFound();
+        if (!todo) throw NotFoundException; // this.badRequest('Not found', HttpStatus.NOT_FOUND);
 
         Object.assign(todo, update);
         return todo;
@@ -46,11 +46,11 @@ export class TodosService implements ITodosService {
 
     delete(id: number): TodoDto {
 
-        if (!id) this.badRequest();
+        if (!id) this.badRequest('Invalid request', HttpStatus.BAD_REQUEST);
 
         const todo = this.findOne(id);
 
-        if (!todo) this.notFound();
+        if (!todo) this.badRequest('Not found', HttpStatus.NOT_FOUND);
         else {
             this.todos = this.todos
                 .filter(item => item.id !== id);
@@ -67,17 +67,14 @@ export class TodosService implements ITodosService {
         }
     }
 
-    private notFound() {
+    private notFound(): HttpException {
         throw new HttpException({
             status: HttpStatus.NOT_FOUND,
             error: 'Not found',
         }, 404);
     }
 
-    private badRequest() {
-        throw new HttpException({
-            status: HttpStatus.BAD_REQUEST,
-            error: 'Invalid request',
-        }, 400);
+    private badRequest(message: string, exception): HttpException {
+        throw new HttpException(message, exception);
     }
 }

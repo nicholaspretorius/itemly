@@ -3,6 +3,7 @@ import { TodosService } from './todos.service';
 
 describe('TodosService', () => {
   let service: TodosService;
+
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [TodosService],
@@ -34,6 +35,11 @@ describe('TodosService', () => {
 
     it('should have an id of 1', async () => {
       expect(result.id).toEqual(1);
+    });
+
+    it('should increase number of todos by 1', async () => {
+      const numTodos = service.findAll();
+      expect(numTodos.length).toEqual(1);
     });
 
     await service.delete(1);

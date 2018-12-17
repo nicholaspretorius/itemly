@@ -1,7 +1,8 @@
-import { Controller, Post, Get, Delete, Put, Header, Param, Body } from '@nestjs/common';
+import { Controller, Post, Get, Delete, Put, Header, Param, Body, UsePipes } from '@nestjs/common';
 import { ApiUseTags, ApiOperation, ApiImplicitParam } from '@nestjs/swagger';
 import { TodoDto } from './dto/todo.dto';
 import { TodosService } from './todos.service';
+import { ValidationPipe } from '../pipes/validation.pipe';
 
 @ApiUseTags('todos')
 @Controller('todos')
@@ -15,6 +16,7 @@ export class TodosController {
      * @returns the todo as confirmation.
      */
     @Post()
+    @UsePipes(ValidationPipe)
     @Header('Cache-Control', 'none')
     @ApiOperation({ title: 'Create a todo'})
     async create(@Body() todo) {
@@ -48,10 +50,11 @@ export class TodosController {
      * @param todoDto The updated details for the Todo being updated.
      */
     @Put(':id')
+    @UsePipes(ValidationPipe)
     @ApiOperation({ title: 'Update a single todo'})
     @ApiImplicitParam({ name: 'id' })
-    async update(@Param() params, @Body() todoDto: TodoDto) {
-        return this.todosService.update(Number(params.id), todoDto);
+    async update(@Param() params, @Body() todo) {
+        return this.todosService.update(Number(params.id), todo);
     }
 
     /**
