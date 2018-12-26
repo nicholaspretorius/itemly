@@ -1,0 +1,10 @@
+{
+    "type": "mysql",
+    "host": "localhost",
+    "port": 3306,
+    "username": "",
+    "password": "",
+    "database": "itemly01",
+    "entities": ["src/**/**.entity{.ts,.js}"],
+    "synchronize": true
+}

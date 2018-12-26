@@ -1,59 +1,61 @@
-import { Injectable, HttpException, HttpStatus, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Injectable, Inject, HttpException, HttpStatus, NotFoundException, BadRequestException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { TodoDto } from './dto/todo.dto';
 import { Todo } from './interfaces/todo.interface';
 import { ITodosService } from './interfaces/todo.service.interface';
+import { TodoEntity } from './entities/todo.entity';
 
 @Injectable()
 export class TodosService implements ITodosService {
 
-    private todos: Todo[] = [];
-    id: number = 0;
+    constructor(
+        @InjectRepository(TodoEntity)
+        private readonly todoRepository: Repository<TodoEntity>,
+    ) {}
 
-    create(todo): TodoDto {
+    async create(todo) {
         // TODO: validate todo object
         if (!todo || !todo.description) this.badRequest('Invalid request', HttpStatus.BAD_REQUEST);
 
-        if (!todo.id) todo.id = ++this.id;
+        // if (!todo.id) todo.id = ++this.id;
+        const create = await this.todoRepository.create(todo);
 
-        this.todos.push(todo);
-        return this.todos[this.id - 1];
+        return await this.todoRepository.save(create);
     }
 
-    findAll(): TodoDto[] {
-        return this.todos;
+    async findAll(): Promise<TodoDto[]> {
+        return await this.todoRepository.find();
     }
 
-    findOne(id: number): TodoDto {
-        const todos = this
-            .findAll()
-            .filter(todo => todo.id === id);
-
-        this.checkForEmpty(todos);
-        return todos.pop();
-    }
-
-    update(id: number, update): TodoDto {
-
-        if (!id) throw BadRequestException;
-
-        const todo = this.findOne(id);
-
-        if (!todo) throw NotFoundException; // this.badRequest('Not found', HttpStatus.NOT_FOUND);
-
-        Object.assign(todo, update);
+    async findOne(id: number): Promise<TodoDto> {
+        const todo = await this.todoRepository.findOne(id);
+        this.checkForEmpty(todo);
         return todo;
     }
 
-    delete(id: number): TodoDto {
+    async update(id: number, update): Promise<TodoDto> {
+
+        if (!id) throw BadRequestException;
+
+        await this.todoRepository.update(id, update);
+
+        const todo = this.todoRepository.findOne(id);
+
+        if (!todo) throw NotFoundException;
+
+        return todo;
+    }
+
+    async delete(id: number): Promise<TodoDto> {
 
         if (!id) this.badRequest('Invalid request', HttpStatus.BAD_REQUEST);
 
-        const todo = this.findOne(id);
+        const todo = await this.todoRepository.findOne(id);
 
         if (!todo) this.badRequest('Not found', HttpStatus.NOT_FOUND);
         else {
-            this.todos = this.todos
-                .filter(item => item.id !== id);
+            await this.todoRepository.remove(todo);
             return todo;
         }
 
