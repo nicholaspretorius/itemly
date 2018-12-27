@@ -1,62 +1,49 @@
+import { Model } from 'mongoose';
 import { Injectable, HttpException, HttpStatus, NotFoundException, BadRequestException } from '@nestjs/common';
-import { TodoDto } from './dto/todo.dto';
-import { Todo } from './interfaces/todo.interface';
+import { InjectModel } from '@nestjs/mongoose';
+import { ITodo } from './interfaces/todo.interface';
 import { ITodosService } from './interfaces/todo.service.interface';
+import { Todo } from './schemas/todo.schema';
 
 @Injectable()
 export class TodosService implements ITodosService {
 
-    private todos: Todo[] = [];
-    id: number = 0;
+    constructor(
+        @InjectModel('Todo') private readonly todoModel: Model<ITodo>,
+    ) {}
 
-    create(todo): TodoDto {
+    async create(todo): Promise<ITodo> {
         // TODO: validate todo object
         if (!todo || !todo.description) this.badRequest('Invalid request', HttpStatus.BAD_REQUEST);
 
-        if (!todo.id) todo.id = ++this.id;
-
-        this.todos.push(todo);
-        return this.todos[this.id - 1];
+        const newTodo = new Todo(todo);
+        const created = new this.todoModel(newTodo);
+        return await created.save();
     }
 
-    findAll(): TodoDto[] {
-        return this.todos;
+    async findAll(): Promise<ITodo[]> {
+        return await this.todoModel.find();
     }
 
-    findOne(id: number): TodoDto {
-        const todos = this
-            .findAll()
-            .filter(todo => todo.id === id);
+    async findOne(id: string): Promise<ITodo> {
+        const todos = await this.todoModel.findById(id);
 
         this.checkForEmpty(todos);
-        return todos.pop();
+        return todos;
     }
 
-    update(id: number, update): TodoDto {
+    async update(id: string, update): Promise<ITodo> {
 
         if (!id) throw BadRequestException;
 
-        const todo = this.findOne(id);
-
-        if (!todo) throw NotFoundException; // this.badRequest('Not found', HttpStatus.NOT_FOUND);
-
-        Object.assign(todo, update);
-        return todo;
+        return await this.todoModel.findByIdAndUpdate(id, update, { new: true });
     }
 
-    delete(id: number): TodoDto {
+    async delete(id: string): Promise<ITodo> {
 
         if (!id) this.badRequest('Invalid request', HttpStatus.BAD_REQUEST);
 
-        const todo = this.findOne(id);
-
-        if (!todo) this.badRequest('Not found', HttpStatus.NOT_FOUND);
-        else {
-            this.todos = this.todos
-                .filter(item => item.id !== id);
-            return todo;
-        }
-
+        return await this.todoModel.findByIdAndDelete(id);
     }
 
     private checkForEmpty(todos) {

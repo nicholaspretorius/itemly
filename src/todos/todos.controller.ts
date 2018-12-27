@@ -41,7 +41,7 @@ export class TodosController {
     @ApiOperation({ title: 'Retrieve a single todo'})
     @ApiImplicitParam({ name: 'id' })
     async findOne(@Param() params) {
-        return this.todosService.findOne(Number(params.id));
+        return this.todosService.findOne(String(params.id));
     }
 
     /**
@@ -50,11 +50,11 @@ export class TodosController {
      * @param todoDto The updated details for the Todo being updated.
      */
     @Put(':id')
-    @UsePipes(ValidationPipe)
+    // @UsePipes(ValidationPipe)
     @ApiOperation({ title: 'Update a single todo'})
     @ApiImplicitParam({ name: 'id' })
     async update(@Param() params, @Body() todo) {
-        return this.todosService.update(Number(params.id), todo);
+        return this.todosService.update(String(params.id), todo);
     }
 
     /**
@@ -65,6 +65,6 @@ export class TodosController {
     @ApiOperation({ title: 'Delete a single todo'})
     @ApiImplicitParam({ name: 'id' })
     async delete(@Param() params) {
-        return this.todosService.delete(Number(params.id));
+        return this.todosService.delete(String(params.id));
     }
 }
