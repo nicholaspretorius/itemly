@@ -16,4 +16,6 @@ export class AppModule implements NestModule {
       .apply(LoggerMiddleware)
       .forRoutes('todos');
   }
+
+  constructor() {}
 }

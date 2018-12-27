@@ -43,9 +43,10 @@ Below are items on the todo list:
 
 - [x] Add MySQL branch
 - [x] Add Postgres branch
-- [] Add Mongo in master
-- [] Update DB settings to use environment variables
-- [] Validation Pipes to check for wrong types, missing params/attributes etc
-- [] Update tests
-- [] Implement GraphQL in branch
+- [x] Add Mongo in master
+- [x] Update DB settings to use environment variables
+- [ ] Update db connection into a module to make use of env
+- [ ] Validation Pipes to check for wrong types, missing params/attributes etc
+- [ ] Update tests
+- [ ] Implement GraphQL in branch
 
