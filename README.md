@@ -36,3 +36,16 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
+
+#### Todos
+
+Below are items on the todo list: 
+
+- [x] Add MySQL branch
+- [x] Add Postgres branch
+- [] Add Mongo in master
+- [] Update DB settings to use environment variables
+- [] Validation Pipes to check for wrong types, missing params/attributes etc
+- [] Update tests
+- [] Implement GraphQL in branch
+
