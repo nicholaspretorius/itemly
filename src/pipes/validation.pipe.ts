@@ -12,9 +12,9 @@ export class ValidationPipe implements PipeTransform {
   };
 
   async transform(value: any, metadata: ArgumentMetadata) {
-
+    console.log('Value: ', value);
     const { error } = Joi.validate(value, this.schema);
-
+    console.log('Error: ', error);
     if (error) throw new BadRequestException('Invalid request');
     return value;
   }

@@ -1,5 +1,5 @@
-export interface Todo {
-    id: number;
+export interface ITodo {
+    id: string;
     readonly description: string;
     readonly done: boolean;
 }

@@ -2,7 +2,7 @@ import { ApiModelProperty } from '@nestjs/swagger';
 
 export class TodoDto {
     @ApiModelProperty()
-    readonly id: number;
+    readonly id: string;
 
     @ApiModelProperty()
     readonly description: string;

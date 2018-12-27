@@ -1,9 +1,10 @@
-import { Todo } from './todo.interface';
+import { ITodo } from './todo.interface';
+import { Todo } from '../entities/todo.entity';
 
 export interface ITodosService {
-    create(todo): Todo;
-    findAll(): Todo[];
-    findOne(id: number): Todo;
-    update(id: number, todo): Todo;
-    delete(id: number): Todo;
+    create(todo): Promise<Todo>;
+    findAll(): Promise<Todo[]>;
+    findOne(id: string): Promise<Todo>;
+    update(id: string, todo): Promise<Todo>;
+    delete(id: string): Promise<Todo>;
 }
