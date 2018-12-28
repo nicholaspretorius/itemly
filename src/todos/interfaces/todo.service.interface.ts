@@ -1,9 +1,9 @@
-import { Todo } from './todo.interface';
+import { ITodo } from './todo.interface';
 
 export interface ITodosService {
-    create(todo): Promise<Todo>;
-    findAll(): Promise<Todo[]>;
-    findOne(id: string): Promise<Todo>;
-    update(id: string, todo): Promise<Todo>;
-    delete(id: string): Promise<Todo>;
+    create(todo): Promise<ITodo>;
+    findAll(): Promise<ITodo[]>;
+    findOne(id: string): Promise<ITodo>;
+    update(id: string, todo): Promise<ITodo>;
+    delete(id: string): Promise<ITodo>;
 }
