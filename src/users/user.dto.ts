@@ -14,4 +14,6 @@ export class UserDto {
     @IsNotEmpty({ message: 'Password is required.' })
     @MinLength(8, { message: 'Password must be a minimum of 8 characters long.'})
     password: string;
+
+    isAdmin: boolean = false;
 }

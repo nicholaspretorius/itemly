@@ -3,10 +3,17 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TodosModule } from './todos/todos.module';
+import { UsersModule } from './users/users.module';
+import { LoginModule } from './login/login.module';
 import { LoggerMiddleware } from './middleware/logger.middleware';
 
 @Module({
-  imports: [MongooseModule.forRoot('mongodb://localhost/itemly01', { useNewUrlParser: true }), TodosModule],
+  imports: [
+    MongooseModule.forRoot('mongodb://localhost/itemly01', { useNewUrlParser: true }),
+    TodosModule,
+    UsersModule,
+    LoginModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

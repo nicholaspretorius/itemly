@@ -8,4 +8,5 @@ export interface IUserService {
     findByEmail(email: string): Promise<IUser>;
     update(id: string, user): Promise<IUser>;
     delete(id: string): Promise<any>;
+    salt(password: string): Promise<any>;
 }

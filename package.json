@@ -26,6 +26,7 @@
     "@nestjs/passport": "^5.1.0",
     "@nestjs/swagger": "^2.5.1",
     "@nestjs/websockets": "^5.0.0",
+    "bcryptjs": "^2.4.3",
     "class-validator": "^0.9.1",
     "dotenv": "^6.2.0",
     "fastify-formbody": "^2.0.0",
@@ -34,6 +35,7 @@
     "passport": "^0.4.0",
     "passport-http-bearer": "^1.0.1",
     "reflect-metadata": "^0.1.12",
+    "request": "^2.88.0",
     "rxjs": "^6.0.0",
     "typescript": "^2.6.2"
   },

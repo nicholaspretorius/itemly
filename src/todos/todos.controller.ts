@@ -20,8 +20,8 @@ export class TodosController {
     @Header('Cache-Control', 'none')
     @ApiOperation({ title: 'Create a todo'})
     async create(@Body() todo) {
-        this.todosService.create(todo);
-        return todo;
+        const newTodo = await this.todosService.create(todo);
+        return newTodo;
     }
 
     /**
