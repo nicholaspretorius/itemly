@@ -1,5 +1,5 @@
-import { IUser } from './user.interface';
-import { UserDto } from './user.dto';
+import { IUser } from '../interfaces/user.interface';
+import { UserDto } from '../dto/user.dto';
 
 export interface IUserService {
     create(user: UserDto): Promise<IUser>;
