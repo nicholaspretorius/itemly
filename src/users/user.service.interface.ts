@@ -1,10 +1,11 @@
 import { IUser } from './user.interface';
+import { UserDto } from './user.dto';
 
 export interface IUserService {
-    create(user): Promise<IUser>;
+    create(user: UserDto): Promise<IUser>;
     findaAll(): Promise<IUser[]>;
     findOne(id: string): Promise<IUser>;
     findByEmail(email: string): Promise<IUser>;
-    update(user): Promise<IUser>;
-    delete(user): Promise<any>;
+    update(id: string, user): Promise<IUser>;
+    delete(id: string): Promise<any>;
 }
