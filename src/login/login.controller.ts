@@ -10,6 +10,6 @@ export class LoginController {
     async login(@Body() user, @Res() res) {
         const auth = await this.loginService.login(user);
         res.set('Authorization', 'Bearer ' + auth.token);
-        res.send({ message: 'success' });
+        res.send(auth);
     }
 }

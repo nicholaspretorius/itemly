@@ -1,4 +1,5 @@
 export interface IJwt {
+    _id: string;
     email: string;
-    password: string;
+    roles: string[];
 }

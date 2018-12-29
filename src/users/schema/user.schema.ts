@@ -6,7 +6,7 @@ export const UserSchema = new mongoose.Schema({
     lastName: String,
     email: String,
     password: String,
-    isAdmin: Boolean,
+    roles: [String],
 });
 
 export const User = mongoose.model('Users', UserSchema);

@@ -2,6 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import * as bcrypt from 'bcryptjs';
 import { UserService } from './../users/users.service';
 import { JwtService } from '@nestjs/jwt';
+import { IJwt } from './interfaces/jwt.interface';
 
 @Injectable()
 
@@ -13,30 +14,40 @@ export class LoginService {
     ) {}
 
     async login(user) {
-        const valid = await this.validateUser(user);
 
-        if (!valid) {
+        if (!user.email || !user.password) {
+            throw new UnauthorizedException();
+        }
+
+        const userOnRecord = await this.loginUser(user);
+
+        if (!userOnRecord) {
             throw new UnauthorizedException();
         } else {
-            const token = await this.jwtService.sign(user);
+            const payload: IJwt = { _id: userOnRecord._id , email: userOnRecord.email, roles: userOnRecord.roles };
+            const token = await this.jwtService.sign(payload);
 
             return {
-                expiresIn: 3600,
+                expiresIn: 1800,
                 token,
             };
         }
 
     }
 
-    async validateUser(user) {
+    async loginUser(user) {
         const userOnRecord = await this.userService.findByEmail(user.email);
 
         if (userOnRecord) {
             const valid = await bcrypt.compare(user.password, userOnRecord.password);
             if (valid) {
-                return valid;
+                return userOnRecord;
             }
         }
         return false;
+    }
+
+    async validateUser(user) {
+        return await this.userService.findByEmail(user.email);
     }
 }

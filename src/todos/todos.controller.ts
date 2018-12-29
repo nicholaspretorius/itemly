@@ -1,8 +1,10 @@
-import { Controller, Post, Get, Delete, Put, Header, Param, Body, UsePipes } from '@nestjs/common';
+import { Controller, Post, Get, Delete, Put, Header, Param, Body, UsePipes, UseGuards, Req } from '@nestjs/common';
 import { ApiUseTags, ApiOperation, ApiImplicitParam } from '@nestjs/swagger';
 import { TodoDto } from './dto/todo.dto';
 import { TodosService } from './todos.service';
 import { ValidationPipe } from '../pipes/validation.pipe';
+import { RolesGuard } from './../login/roles.guard';
+import { Roles } from './../login/roles.decorator';
 
 @ApiUseTags('todos')
 @Controller('todos')
@@ -28,6 +30,8 @@ export class TodosController {
      * @returns `Todo[]` Returns all available Todos.
      */
     @Get()
+    @Roles('admin', 'user')
+    @UseGuards(RolesGuard)
     @ApiOperation({ title: 'Retrieve all todos'})
     async findAll() {
         return this.todosService.findAll();

@@ -15,5 +15,5 @@ export class UserDto {
     @MinLength(8, { message: 'Password must be a minimum of 8 characters long.'})
     password: string;
 
-    isAdmin: boolean = false;
+    roles: string[];
 }
