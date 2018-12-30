@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class AppService {
-  root(): string {
-    return 'Hello World!';
+  root() {
+    return { message: 'Hello World! Welcome to the Itemly API!'};
   }
 }

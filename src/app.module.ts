@@ -4,7 +4,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TodosModule } from './todos/todos.module';
 import { UsersModule } from './users/users.module';
-import { LoginModule } from './login/login.module';
+import { AuthModule } from './auth/auth.module';
 import { LoggerMiddleware } from './middleware/logger.middleware';
 
 @Module({
@@ -12,7 +12,7 @@ import { LoggerMiddleware } from './middleware/logger.middleware';
     MongooseModule.forRoot('mongodb://localhost/itemly01', { useNewUrlParser: true }),
     TodosModule,
     UsersModule,
-    LoginModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

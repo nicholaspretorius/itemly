@@ -1,12 +1,12 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import * as bcrypt from 'bcryptjs';
-import { UserService } from './../users/users.service';
+import { UserService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { IJwt } from './interfaces/jwt.interface';
 
 @Injectable()
 
-export class LoginService {
+export class AuthService {
 
     constructor(
         private readonly userService: UserService,
@@ -19,7 +19,7 @@ export class LoginService {
             throw new UnauthorizedException();
         }
 
-        const userOnRecord = await this.loginUser(user);
+        const userOnRecord = await this.authorise(user);
 
         if (!userOnRecord) {
             throw new UnauthorizedException();
@@ -35,7 +35,7 @@ export class LoginService {
 
     }
 
-    async loginUser(user) {
+    async authorise(user) {
         const userOnRecord = await this.userService.findByEmail(user.email);
 
         if (userOnRecord) {

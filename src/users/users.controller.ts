@@ -3,9 +3,11 @@ import { UserDto } from './dto/user.dto';
 import { IUser } from './interfaces/user.interface';
 import { UserService } from './users.service';
 import { AuthGuard } from '@nestjs/passport';
-import { RolesGuard } from './../login/roles.guard';
-import { Roles } from './../login/roles.decorator';
+import { RolesGuard } from './../auth/roles.guard';
+import { Roles } from './../auth/roles.decorator';
+import { ApiUseTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 
+@ApiUseTags('users')
 @Controller('users')
 
 export class UsersController {
@@ -21,6 +23,8 @@ export class UsersController {
     @Get()
     @Roles('admin')
     @UseGuards(AuthGuard('jwt'), RolesGuard)
+    @ApiOperation({ title: 'Retrieve all the users.'})
+    @ApiBearerAuth()
     async findAll(): Promise<IUser[]> {
         return await this.userService.findaAll();
     }
@@ -28,21 +32,26 @@ export class UsersController {
     @Get(':id')
     @Roles('admin')
     @UseGuards(AuthGuard('jwt'), RolesGuard)
+    @ApiOperation({ title: 'Retrieve a user by :id.'})
+    @ApiBearerAuth()
     async findOne(@Param() params): Promise<IUser> {
         return await this.userService.findOne(params.id);
     }
 
     @Get(':email')
+    @ApiOperation({ title: 'Retrieve a user by :email.'})
     async findByEmail(@Param() email: string): Promise<IUser> {
         return await this.userService.findByEmail(email);
     }
 
     @Put(':id')
+    @ApiOperation({ title: 'Update a user.'})
     async update(@Param() params, @Body() user): Promise<IUser> {
         return await this.userService.update(params.id, user);
     }
 
     @Delete(':id')
+    @ApiOperation({ title: 'Delete a user.'})
     async delete(@Param() params): Promise<IUser> {
         return await this.userService.delete(params.id);
     }
