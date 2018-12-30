@@ -21,8 +21,8 @@ export class TodosController {
     @UsePipes(ValidationPipe)
     @Header('Cache-Control', 'none')
     @ApiOperation({ title: 'Create a todo'})
-    async create(@Body() todo: TodoDto) {
-        const newTodo = await this.todosService.create(todo);
+    async create(@Body() todo: TodoDto, @Req() req) {
+        const newTodo = await this.todosService.create(todo, req.user.id);
         return newTodo;
     }
 

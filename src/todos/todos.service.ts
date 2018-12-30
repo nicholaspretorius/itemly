@@ -12,11 +12,15 @@ export class TodosService implements ITodosService {
         @InjectModel('Todo') private readonly todoModel: Model<ITodo>,
     ) {}
 
-    async create(todo): Promise<ITodo> {
+    async create(todo, userId): Promise<ITodo> {
         // TODO: validate todo object
         if (!todo || !todo.description) this.badRequest('Invalid request', HttpStatus.BAD_REQUEST);
-
-        const newTodo = new Todo(todo);
+        const userTodo = {
+            description: todo.description,
+            done: false,
+            userId,
+        };
+        const newTodo = new Todo(userTodo);
         const created = new this.todoModel(newTodo);
         return await created.save();
     }
