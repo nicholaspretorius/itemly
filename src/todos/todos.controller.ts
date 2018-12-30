@@ -3,6 +3,7 @@ import { ApiUseTags, ApiOperation, ApiImplicitParam } from '@nestjs/swagger';
 import { TodoDto } from './dto/todo.dto';
 import { TodosService } from './todos.service';
 import { ValidationPipe } from '../pipes/validation.pipe';
+import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard } from './../auth/roles.guard';
 import { Roles } from './../auth/roles.decorator';
 
@@ -18,11 +19,13 @@ export class TodosController {
      * @returns the todo as confirmation.
      */
     @Post()
-    @UsePipes(ValidationPipe)
+    // @UsePipes(ValidationPipe)
     @Header('Cache-Control', 'none')
     @ApiOperation({ title: 'Create a todo'})
+    @Roles('admin')
+    @UseGuards(AuthGuard('jwt'), RolesGuard)
     async create(@Body() todo: TodoDto, @Req() req) {
-        const newTodo = await this.todosService.create(todo, req.user.id);
+        const newTodo = await this.todosService.create(todo, req.user._id);
         return newTodo;
     }
 
@@ -31,8 +34,10 @@ export class TodosController {
      */
     @Get()
     @ApiOperation({ title: 'Retrieve all todos'})
-    async findAll() {
-        return this.todosService.findAll();
+    @Roles('admin')
+    @UseGuards(AuthGuard('jwt'), RolesGuard)
+    async findAll(@Req() req) {
+        return this.todosService.findAll(req.user._id);
     }
 
     /**

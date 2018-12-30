@@ -25,8 +25,8 @@ export class TodosService implements ITodosService {
         return await created.save();
     }
 
-    async findAll(): Promise<ITodo[]> {
-        return await this.todoModel.find();
+    async findAll(userId): Promise<ITodo[]> {
+        return await this.todoModel.find({ userId });
     }
 
     async findOne(id: string): Promise<ITodo> {
