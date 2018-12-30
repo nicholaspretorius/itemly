@@ -9,6 +9,8 @@ import { Roles } from './../auth/roles.decorator';
 
 @ApiUseTags('todos')
 @Controller('todos')
+@Roles('admin')
+@UseGuards(AuthGuard('jwt'), RolesGuard)
 export class TodosController {
 
     constructor(private readonly todosService: TodosService) {}
@@ -22,8 +24,6 @@ export class TodosController {
     // @UsePipes(ValidationPipe)
     @Header('Cache-Control', 'none')
     @ApiOperation({ title: 'Create a todo'})
-    @Roles('admin')
-    @UseGuards(AuthGuard('jwt'), RolesGuard)
     async create(@Body() todo: TodoDto, @Req() req) {
         const newTodo = await this.todosService.create(todo, req.user._id);
         return newTodo;
@@ -34,8 +34,6 @@ export class TodosController {
      */
     @Get()
     @ApiOperation({ title: 'Retrieve all todos'})
-    @Roles('admin')
-    @UseGuards(AuthGuard('jwt'), RolesGuard)
     async findAll(@Req() req) {
         return this.todosService.findAll(req.user._id);
     }
@@ -47,8 +45,8 @@ export class TodosController {
     @Get(':id')
     @ApiOperation({ title: 'Retrieve a single todo'})
     @ApiImplicitParam({ name: 'id' })
-    async findOne(@Param() params) {
-        return this.todosService.findOne(String(params.id));
+    async findOne(@Param() params, @Req() req) {
+        return this.todosService.findOne(String(params.id), req.user._id);
     }
 
     /**
@@ -60,8 +58,8 @@ export class TodosController {
     // @UsePipes(ValidationPipe)
     @ApiOperation({ title: 'Update a single todo'})
     @ApiImplicitParam({ name: 'id' })
-    async update(@Param() params, @Body() todo) {
-        return this.todosService.update(String(params.id), todo);
+    async update(@Param() params, @Body() todo, @Req() req) {
+        return this.todosService.update(String(params.id), todo, req.user._id);
     }
 
     /**
@@ -71,7 +69,7 @@ export class TodosController {
     @Delete(':id')
     @ApiOperation({ title: 'Delete a single todo'})
     @ApiImplicitParam({ name: 'id' })
-    async delete(@Param() params) {
-        return this.todosService.delete(String(params.id));
+    async delete(@Param() params, @Req() req) {
+        return this.todosService.delete(String(params.id), req.user._id);
     }
 }

@@ -25,33 +25,44 @@ export class TodosService implements ITodosService {
         return await created.save();
     }
 
-    async findAll(userId): Promise<ITodo[]> {
-        return await this.todoModel.find({ userId });
+    async findAll(userId: string): Promise<ITodo[]> {
+        const query: any = { userId };
+        return await this.todoModel.find(query);
     }
 
-    async findOne(id: string): Promise<ITodo> {
-        const todos = await this.todoModel.findById(id);
+    async findOne(id: string, userId: string): Promise<ITodo> {
+
+        const query = { _id: id, userId };
+        const todos = await this.todoModel.findOne(query);
 
         this.checkForEmpty(todos);
+
         return todos;
     }
 
-    async update(id: string, update): Promise<ITodo> {
+    async update(id: string, update, userId: string): Promise<ITodo> {
 
         if (!id) throw BadRequestException;
 
-        return await this.todoModel.findByIdAndUpdate(id, update, { new: true });
+        const query = { _id: id, userId };
+        const todo = await this.todoModel.findOneAndUpdate(query, update, { new: true });
+
+        this.checkForEmpty(todo);
+
+        return todo;
     }
 
-    async delete(id: string): Promise<ITodo> {
+    async delete(id: string, userId: string): Promise<ITodo> {
 
         if (!id) this.badRequest('Invalid request', HttpStatus.BAD_REQUEST);
 
-        return await this.todoModel.findByIdAndDelete(id);
+        const query = { _id: id, userId };
+
+        return await this.todoModel.findOneAndDelete(query);
     }
 
     private checkForEmpty(todos) {
-        if (todos.length === 0) {
+        if (todos === null || todos.length === 0) {
             this.notFound();
         } else {
             return;

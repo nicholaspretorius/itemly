@@ -19,7 +19,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     }
 
     async validate(payload: IJwt) {
-        console.log(`JWT payload`, payload);
+
         const user = this.authService.validateUser(payload);
 
         if (!user) {
