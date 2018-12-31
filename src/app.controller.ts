@@ -1,4 +1,4 @@
-import { Get, Controller } from '@nestjs/common';
+import { Get, Controller, Body, Post } from '@nestjs/common';
 import { Transport, Client, ClientProxy } from '@nestjs/microservices';
 import { AppService } from './app.service';
 
@@ -15,10 +15,16 @@ export class AppController {
   @Client({ transport: Transport.TCP })
   client: ClientProxy;
 
-  @Get('register')
-  registerUser() {
+  @Post('register')
+  async registerUser(@Body() params) {
     const pattern = { cmd: 'register' };
 
-    return this.client.send(pattern, []);
+    const payload = {
+      to: params.to,
+      subject: params.subject,
+      message: params.message,
+    };
+
+    return await this.client.send(pattern, payload);
   }
 }
