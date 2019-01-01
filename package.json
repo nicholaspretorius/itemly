@@ -30,6 +30,7 @@
     "@nestjs/websockets": "^5.0.0",
     "bcryptjs": "^2.4.3",
     "cache-manager": "^2.9.0",
+    "cache-manager-redis-store": "^1.5.0",
     "class-validator": "^0.9.1",
     "dotenv": "^6.2.0",
     "fastify-formbody": "^2.0.0",

@@ -9,7 +9,6 @@ import { Roles } from './../auth/roles.decorator';
 
 @ApiUseTags('todos')
 @Controller('todos')
-@UseInterceptors(CacheInterceptor)
 @Roles('admin')
 @UseGuards(AuthGuard('jwt'), RolesGuard)
 export class TodosController {
@@ -34,6 +33,7 @@ export class TodosController {
      * @returns `Todo[]` Returns all available Todos.
      */
     @Get()
+    @UseInterceptors(CacheInterceptor)
     @ApiOperation({ title: 'Retrieve all todos'})
     async findAll(@Req() req) {
         return this.todosService.findAll(req.user._id);
