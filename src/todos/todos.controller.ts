@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Delete, Put, Header, Param, Body, UsePipes, UseGuards, Req } from '@nestjs/common';
+import { Controller, CacheInterceptor, Post, Get, Delete, Put, Header, Param, Body, UsePipes, UseGuards, Req, UseInterceptors } from '@nestjs/common';
 import { ApiUseTags, ApiOperation, ApiImplicitParam } from '@nestjs/swagger';
 import { TodoDto } from './dto/todo.dto';
 import { TodosService } from './todos.service';
@@ -9,6 +9,7 @@ import { Roles } from './../auth/roles.decorator';
 
 @ApiUseTags('todos')
 @Controller('todos')
+@UseInterceptors(CacheInterceptor)
 @Roles('admin')
 @UseGuards(AuthGuard('jwt'), RolesGuard)
 export class TodosController {
