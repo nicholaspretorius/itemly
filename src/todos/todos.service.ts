@@ -14,8 +14,7 @@ export class TodosService implements ITodosService {
         private readonly todoRepository: Repository<Todo>,
     ) {}
 
-    async create(todo): Promise<Todo> {
-        // TODO: validate todo object
+    async create(todo) {
         if (!todo || !todo.description) this.badRequest('Invalid request', HttpStatus.BAD_REQUEST);
 
         return await this.todoRepository.save(todo);
